@@ -128,8 +128,8 @@ create policy "group creator insert" on public.farmer_groups for insert to authe
 create policy "group membership read" on public.group_members for select to authenticated using(true);
 create policy "join as self" on public.group_members for insert to authenticated with check(user_id=auth.uid());
 create policy "leave as self" on public.group_members for delete to authenticated using(user_id=auth.uid());
-create policy "members read posts" on public.group_posts for select to authenticated using(exists(select 1 from public.group_members m where m.group_id=group_id and m.user_id=auth.uid()));
-create policy "members create posts" on public.group_posts for insert to authenticated with check(user_id=auth.uid() and exists(select 1 from public.group_members m where m.group_id=group_id and m.user_id=auth.uid()));
+create policy "members read posts" on public.group_posts for select to authenticated using(exists(select 1 from public.group_members m where m.group_id=group_posts.group_id and m.user_id=auth.uid()));
+create policy "members create posts" on public.group_posts for insert to authenticated with check(user_id=auth.uid() and exists(select 1 from public.group_members m where m.group_id=group_posts.group_id and m.user_id=auth.uid()));
 
 create index if not exists gs_tasks_user_due on public.farm_tasks(user_id,due_date);
 create index if not exists gs_listings_active on public.marketplace_listings(status,created_at desc);
